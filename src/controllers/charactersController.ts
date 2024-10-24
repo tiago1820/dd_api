@@ -7,6 +7,9 @@ class CharactersController {
     async index(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await characterService.index();
+            if (data.length === 0) {
+                return res.status(200).json({ message: "No characters found." });
+            }
             res.status(200).json(data);
         } catch (error) {
             next(error);
@@ -26,6 +29,9 @@ class CharactersController {
         const { id } = req.params;
         try {
             const data = await characterService.show(Number(id));
+            if (!data) {
+                return res.status(200).json({ message: "Character not found." });
+            }
             res.status(200).json(data);
         } catch (error) {
             next(error);

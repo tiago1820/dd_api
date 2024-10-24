@@ -33,9 +33,6 @@ class CharacterService {
     async show(id: number) {
         try {
             const data = await Character.findOneBy({ id });
-            if (!data) {
-                throw new Error('Character not found.');
-            }
             return data;
         } catch (error) {
             throw new Error(`Error retrieving character with id ${id} from database`)
