@@ -62,7 +62,7 @@ class CharactersController {
                 throw new Error('Character not found.');
             }
             await Character.delete({ id: Number(id) });
-            return res.status(200).json({message: `Character ${result.name} was deleted successfully.`})
+            res.status(200).json({message: `Character ${result.name} was deleted successfully.`})
         } catch (error) {
             if (error instanceof Error)
                 res.status(500).send(error.message);
