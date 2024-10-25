@@ -1,10 +1,15 @@
 import app from './app';
 import { AppDataSource } from './db/conection';
+import { createClient } from 'redis';
+
+const client = createClient();
 
 async function main() {
     try {
         await AppDataSource.initialize();
         console.log('Database conected');
+
+        await client.connect();
         app.listen(3000, () => {
             console.log('Server conected');
         });
@@ -16,3 +21,4 @@ async function main() {
 }
 
 main();
+export { client };

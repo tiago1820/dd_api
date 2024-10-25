@@ -1,15 +1,24 @@
 import { Request, Response, NextFunction } from "express";
-import { Character } from '../models/characterModel';
+import { client } from '../index';
 import characterService from "../services/characterService";
 
 class CharactersController {
 
     async index(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            const cachedCharacters = await client.get('characters');
+            if (cachedCharacters) {
+                res.status(200).json(JSON.parse(cachedCharacters));
+                return;
+            }
+
             const data = await characterService.index();
             if (data.length === 0) {
                 res.status(200).json({ message: "No characters found." });
+                return;
             }
+
+            await client.setEx('characters', 60, JSON.stringify(data));
             res.status(200).json(data);
         } catch (error) {
             next(error);
