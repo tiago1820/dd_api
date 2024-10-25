@@ -23,8 +23,9 @@ class CharacterService {
 
     async store(character: CharacterType) {
         try {
-            const data = await Character.save(character);
-            return data;
+            const newCharacter = Character.create(character);
+            await newCharacter.save();
+            return newCharacter;
         } catch (error) {
             throw new Error("Error saving the character to the database");
         }
@@ -33,6 +34,9 @@ class CharacterService {
     async show(id: number) {
         try {
             const data = await Character.findOneBy({ id });
+            if (!data) {
+                throw new Error(`Character with id ${id} not found.`);
+            }
             return data;
         } catch (error) {
             throw new Error(`Error retrieving character with id ${id} from database`)
@@ -41,13 +45,12 @@ class CharacterService {
 
     async update(id: number, body: CharacterType) {
         try {
-            const result = await Character.findOneBy({ id });
-            if (!result) {
+            const character = await Character.findOneBy({ id });
+            if (!character) {
                 throw new Error('Character not found.');
             }
             await Character.update({ id }, body);
-            const data = await Character.findOneBy({ id });
-            return data;
+            return { ...character, ...body };
         } catch (error) {
             throw new Error('Error editing character in database');
         }
@@ -55,12 +58,12 @@ class CharacterService {
 
     async destroy(id: number) {
         try {
-            const result = await Character.findOneBy({ id });
-            if (!result) {
+            const character = await Character.findOneBy({ id });
+            if (!character) {
                 throw new Error('Character not found.');
             }
             await Character.delete({ id });
-            return `Character ${result.name} was deleted successfuly.`
+            return `Character ${character.name} was deleted successfuly.`
         } catch (error) {
             throw new Error('Error deleting a character in the database');
         }
