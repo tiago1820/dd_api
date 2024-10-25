@@ -49,7 +49,7 @@ class CharactersController {
         const { id } = req.params;
         try {
             const message = await characterService.destroy(Number(id));
-            res.status(200).json(message);
+            res.status(200).json({ message });
         } catch (error) {
             next(error);
         }

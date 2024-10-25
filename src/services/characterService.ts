@@ -62,7 +62,7 @@ class CharacterService {
             if (!character) {
                 throw new Error('Character not found.');
             }
-            await Character.delete({ id });
+            await Character.remove(character);
             return `Character ${character.name} was deleted successfuly.`
         } catch (error) {
             throw new Error('Error deleting a character in the database');
