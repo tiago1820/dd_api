@@ -1,4 +1,4 @@
-import { Character } from '../models/characterModel';
+import { Character } from '../models/character.model';
 
 interface CharacterType {
     name: string;
