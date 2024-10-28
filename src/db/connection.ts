@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
-import { Character } from "../models/characterModel";
+import { Character } from "../models/character.model";
+import { Episode } from "../models/episode.model";
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -9,6 +10,6 @@ export const AppDataSource = new DataSource({
     password: '123456',
     database: 'dd_api',
     logging: true,
-    entities: [Character],
+    entities: [Character, Episode],
     synchronize: false
 });

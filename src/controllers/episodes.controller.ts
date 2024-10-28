@@ -1,25 +1,26 @@
 import { Request, Response, NextFunction } from "express";
 import { client } from '../index';
-import characterService from "../services/characterService";
+import episodeService from "../services/episode.service";
 
-class CharactersController {
+class EpisodeController {
 
     async index(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const cachedCharacters = await client.get('characters');
-            if (cachedCharacters) {
-                res.status(200).json(JSON.parse(cachedCharacters));
+            const cachedEpisodes = await client.get('episodes');
+            if (cachedEpisodes) {
+                res.status(200).json(JSON.parse(cachedEpisodes));
                 return;
             }
 
-            const data = await characterService.index();
+            const data = await episodeService.index();
             if (data.length === 0) {
-                res.status(200).json({ message: "No characters found." });
+                res.status(200).json({ message: "No episodes found." });
                 return;
             }
 
-            await client.setEx('characters', 60, JSON.stringify(data));
+            await client.setEx('episodes', 60, JSON.stringify(data));
             res.status(200).json(data);
+            
         } catch (error) {
             next(error);
         }
@@ -27,9 +28,9 @@ class CharactersController {
 
     async store(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data = await characterService.store(req.body);
+            const data = await episodeService.store(req.body);
             res.status(201).json(data);
-        } catch (error) {
+        } catch (error) {            
             next(error);
         }
     }
@@ -37,7 +38,7 @@ class CharactersController {
     async show(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
-            const data = await characterService.show(Number(id));
+            const data = await episodeService.show(Number(id));
             res.status(200).json(data);
         } catch (error) {
             next(error);
@@ -47,7 +48,7 @@ class CharactersController {
     async update(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
-            const data = await characterService.update(Number(id), req.body);
+            const data = await episodeService.update(Number(id), req.body);
             res.status(200).json(data);
         } catch (error) {
             next(error);
@@ -57,7 +58,7 @@ class CharactersController {
     async destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
-            const message = await characterService.destroy(Number(id));
+            const message = await episodeService.destroy(Number(id));
             res.status(200).json({ message });
         } catch (error) {
             next(error);
@@ -66,4 +67,4 @@ class CharactersController {
 
 }
 
-export default new CharactersController();
+export default new EpisodeController();
