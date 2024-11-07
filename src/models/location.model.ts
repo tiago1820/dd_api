@@ -7,22 +7,19 @@ import {
     UpdateDateColumn
 } from "typeorm";
 
-@Entity('episodes')
-export class Episode extends BaseEntity {
+@Entity('locations')
+export class Location extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
     name: String;
 
-    @Column()
-    air_date: String;
+    @Column({ nullable: true })
+    bornHere?: String;
 
-    @Column()
-    episode_code: String;
-
-    @Column()
-    url: String;
+    @Column({ nullable: true })
+    diedHere?: String;
 
     @CreateDateColumn()
     createdAt: Date;

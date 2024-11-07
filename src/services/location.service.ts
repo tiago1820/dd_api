@@ -1,28 +1,28 @@
-import { Episode } from '../models/episode.model';
+import { Location } from '../models/location.model';
 
-interface EpisodeType {
+interface LocationType {
     name: string;
     air_date: string;
     episode_code: string;
     url: string;
 }
 
-class EpisodeService {
+class LocationService {
 
     async index() {
         try {
-            const data = await Episode.find();
+            const data = await Location.find();
             return data;
         } catch (error) {
             throw new Error("Error retrieving episodes from the database");
         }
     }
 
-    async store(episode: EpisodeType) {
+    async store(episode: LocationType) {
         try {
-            const newEpisode = Episode.create(episode);
-            await newEpisode.save();
-            return newEpisode;
+            const newLocation = Location.create(episode);
+            await newLocation.save();
+            return newLocation;
         } catch (error) {
             throw new Error("Error saving the episode to the database");
         }
@@ -30,7 +30,7 @@ class EpisodeService {
 
     async show(id: number) {
         try {
-            const data = await Episode.findOneBy({ id });
+            const data = await Location.findOneBy({ id });
             if (!data) {
                 throw new Error(`Episode with id ${id} not found.`);
             }
@@ -40,14 +40,14 @@ class EpisodeService {
         }
     }
 
-    async update(id: number, body: EpisodeType) {
+    async update(id: number, body: LocationType) {
         try {
-            const episode = await Episode.findOneBy({ id });
-            if (!episode) {
-                throw new Error('Episode not found.');
+            const location = await Location.findOneBy({ id });
+            if (!location) {
+                throw new Error('Location not found.');
             }
-            await Episode.update({ id }, body);
-            return { ...episode, ...body };
+            await Location.update({ id }, body);
+            return { ...location, ...body };
         } catch (error) {
             throw new Error('Error editing episode in database');
         }
@@ -55,12 +55,12 @@ class EpisodeService {
 
     async destroy(id: number) {
         try {
-            const episode = await Episode.findOneBy({ id });
-            if (!episode) {
+            const location = await Location.findOneBy({ id });
+            if (!location) {
                 throw new Error('Reformer not found.');
             }
-            await Episode.remove(episode);
-            return `Episode ${episode.name} was deleted successfuly.`
+            await Location.remove(location);
+            return `Episode ${location.name} was deleted successfuly.`
         } catch (error) {
             throw new Error('Error deleting a episode in the database');
         }
@@ -68,4 +68,4 @@ class EpisodeService {
 
 }
 
-export default new EpisodeService();
+export default new LocationService();

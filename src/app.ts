@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import reformersRoutes from './routes/reformers.routes';
-import episodesRoutes from './routes/episodes.routes';
+import locationRoutes from './routes/locations.routes';
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 app.use('/reformers', reformersRoutes);
-app.use('/episodes', episodesRoutes);
+app.use('/locations', locationRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err);
