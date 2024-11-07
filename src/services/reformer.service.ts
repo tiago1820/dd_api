@@ -4,8 +4,8 @@ interface ReformerType {
     name: string;
     born: string;
     died: string;
-    placeOfBirth: string;
-    placeOfDeath: string;
+    // placeOfBirth: number;
+    // placeOfDeath: string;
     image: string;
     url: string;
 }
