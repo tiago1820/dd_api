@@ -7,8 +7,8 @@ import {
     UpdateDateColumn
 } from "typeorm";
 
-@Entity('characters')
-export class Character extends BaseEntity {
+@Entity('reformers')
+export class Reformer extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 

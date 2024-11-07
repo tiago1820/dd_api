@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import charactersRoutes from './routes/characters.routes';
+import reformersRoutes from './routes/reformers.routes';
 import episodesRoutes from './routes/episodes.routes';
 
 const app = express();
@@ -12,12 +12,12 @@ app.use(cors());
 
 app.get('/api', (req: Request, res: Response) => {
     const data = {
-        "characters": "http://localhost:3000/api/characters",
+        "reformers": "http://localhost:3000/api/reformers",
     }
     res.send(data);
 });
 
-app.use('/characters', charactersRoutes);
+app.use('/reformers', reformersRoutes);
 app.use('/episodes', episodesRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
