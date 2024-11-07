@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Character } from "../models/character.model";
+import { Reformer } from "../models/reformer.model";
 import { Episode } from "../models/episode.model";
 
 export const AppDataSource = new DataSource({
@@ -8,8 +8,8 @@ export const AppDataSource = new DataSource({
     port: 3306,
     username: 'tiago',
     password: '123456',
-    database: 'dd_api',
+    database: 'reformersapi',
     logging: true,
-    entities: [Character, Episode],
+    entities: [Reformer, Episode],
     synchronize: false
 });
