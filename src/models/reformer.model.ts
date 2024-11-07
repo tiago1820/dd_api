@@ -30,8 +30,8 @@ export class Reformer extends BaseEntity {
     @CreateDateColumn()
     createdAt: Date;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+    // @UpdateDateColumn()
+    // updatedAt: Date;
 
     @ManyToOne(() => Location, (location) => location.reformersBornHere)
     @JoinColumn({ name: 'placeOfBirth' })

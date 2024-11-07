@@ -1,11 +1,10 @@
 import { Reformer } from '../models/reformer.model';
+import { Location } from '../models/location.model';
 
 interface ReformerType {
     name: string;
     born: string;
     died: string;
-    // placeOfBirth: number;
-    // placeOfDeath: string;
     image: string;
     url: string;
 }
@@ -14,7 +13,18 @@ class ReformerService {
 
     async index() {
         try {
-            const data = await Reformer.find();
+            const data = await Reformer.createQueryBuilder('reformer')
+                .leftJoinAndSelect('reformer.placeOfBirth', 'placeOfBirth')
+                .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath')
+                .select([
+                    'reformer',
+                    'placeOfBirth.id',
+                    'placeOfBirth.name',
+                    'placeOfDeath.id',
+                    'placeOfDeath.name'
+                ])
+                .getMany();
+
             return data;
         } catch (error) {
             throw new Error("Error retrieving reformers from the database");
@@ -26,14 +36,26 @@ class ReformerService {
             const newReformer = Reformer.create(reformer);
             await newReformer.save();
             return newReformer;
-        } catch (error) {            
+        } catch (error) {
             throw new Error("Error saving the reformer to the database");
         }
     }
 
     async show(id: number) {
         try {
-            const data = await Reformer.findOneBy({ id });
+            const data = await Reformer.createQueryBuilder('reformer')
+                .leftJoinAndSelect('reformer.placeOfBirth', 'placeOfBirth')
+                .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath')
+                .where('reformer.id = :id', { id })
+                .select([
+                    'reformer',
+                    'placeOfBirth.id',
+                    'placeOfBirth.name',
+                    'placeOfDeath.id',
+                    'placeOfDeath.name'
+                ])
+                .getOne();
+
             if (!data) {
                 throw new Error(`Reformer with id ${id} not found.`);
             }
@@ -52,8 +74,6 @@ class ReformerService {
             await Reformer.update({ id }, body);
             return { ...reformer, ...body };
         } catch (error) {
-            console.log("OPAAA!: ", error);
-            
             throw new Error('Error editing reformer in database');
         }
     }
@@ -68,6 +88,90 @@ class ReformerService {
             return `Reformer ${reformer.name} was deleted successfuly.`
         } catch (error) {
             throw new Error('Error deleting a reformer in the database');
+        }
+    }
+
+    async setPlaceOfBirth(reformer_id: number, location_id: number) {
+        try {
+            const location = await Location.findOne({
+                where: { id: Number(location_id) },
+                select: ['id', 'name']
+            });
+
+            if (!location) {
+                throw new Error('Location not found.');
+            }
+
+            const reformer = await Reformer.findOne({
+                where: { id: reformer_id },
+                relations: ['placeOfBirth']
+            });
+
+            if (!reformer) {
+                throw new Error('Reformer not found.');
+            }
+
+            reformer.placeOfBirth = location;
+            await Reformer.save(reformer);
+
+            const data = await Reformer.createQueryBuilder('reformer')
+                .leftJoinAndSelect('reformer.placeOfBirth', 'placeOfBirth')
+                .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath')
+                .where('reformer.id = :id', { id: reformer_id })
+                .select([
+                    'reformer',
+                    'placeOfBirth.id',
+                    'placeOfBirth.name',
+                    'placeOfDeath.id',
+                    'placeOfDeath.name'
+                ])
+                .getOne();
+
+            return data;
+        } catch (error) {
+            throw new Error('Error associating the location with the reformer.');
+        }
+    }
+
+    async setPlaceOfDeath(reformer_id: number, location_id: number) {
+        try {
+            const location = await Location.findOne({
+                where: { id: Number(location_id) },
+                select: ['id', 'name']
+            });
+
+            if (!location) {
+                throw new Error('Location not found.');
+            }
+
+            const reformer = await Reformer.findOne({
+                where: { id: reformer_id },
+                relations: ['placeOfDeath']
+            });
+
+            if (!reformer) {
+                throw new Error('Reformer not found.');
+            }
+
+            reformer.placeOfDeath = location;
+            await Reformer.save(reformer);
+
+            const data = await Reformer.createQueryBuilder('reformer')
+                .leftJoinAndSelect('reformer.placeOfBirth', 'placeOfBirth')
+                .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath')
+                .where('reformer.id = :id', { id: reformer_id })
+                .select([
+                    'reformer',
+                    'placeOfBirth.id',
+                    'placeOfBirth.name',
+                    'placeOfDeath.id',
+                    'placeOfDeath.name'
+                ])
+                .getOne();
+
+            return data;
+        } catch (error) {
+            throw new Error('Error associating the location with the reformer.');
         }
     }
 
