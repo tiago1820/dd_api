@@ -17,7 +17,7 @@ class ReformerService {
             const data = await Reformer.find();
             return data;
         } catch (error) {
-            throw new Error("Error retrieving characters from the database");
+            throw new Error("Error retrieving reformers from the database");
         }
     }
 
@@ -26,8 +26,8 @@ class ReformerService {
             const newReformer = Reformer.create(reformer);
             await newReformer.save();
             return newReformer;
-        } catch (error) {
-            throw new Error("Error saving the character to the database");
+        } catch (error) {            
+            throw new Error("Error saving the reformer to the database");
         }
     }
 
@@ -65,7 +65,7 @@ class ReformerService {
             await Reformer.remove(reformer);
             return `Reformer ${reformer.name} was deleted successfuly.`
         } catch (error) {
-            throw new Error('Error deleting a character in the database');
+            throw new Error('Error deleting a reformer in the database');
         }
     }
 

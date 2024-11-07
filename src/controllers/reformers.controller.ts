@@ -31,6 +31,8 @@ class ReformersController {
             const data = await reformerService.store(req.body);
             res.status(201).json(data);
         } catch (error) {
+            console.log("AQUI: ", error);
+            
             next(error);
         }
     }

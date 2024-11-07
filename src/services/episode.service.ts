@@ -57,7 +57,7 @@ class EpisodeService {
         try {
             const episode = await Episode.findOneBy({ id });
             if (!episode) {
-                throw new Error('Character not found.');
+                throw new Error('Reformer not found.');
             }
             await Episode.remove(episode);
             return `Episode ${episode.name} was deleted successfuly.`
