@@ -2,11 +2,11 @@ import { Reformer } from '../models/reformer.model';
 
 interface ReformerType {
     name: string;
-    status: string;
-    species: string;
-    gender: string;
+    born: string;
+    died: string;
+    placeOfBirth: string;
+    placeOfDeath: string;
     image: string;
-    episode: string;
     url: string;
 }
 
@@ -52,6 +52,8 @@ class ReformerService {
             await Reformer.update({ id }, body);
             return { ...reformer, ...body };
         } catch (error) {
+            console.log("OPAAA!: ", error);
+            
             throw new Error('Error editing reformer in database');
         }
     }

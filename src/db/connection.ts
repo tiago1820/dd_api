@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { Reformer } from "../models/reformer.model";
-import { Episode } from "../models/episode.model";
+import { Location } from "../models/location.model";
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -10,6 +10,6 @@ export const AppDataSource = new DataSource({
     password: '123456',
     database: 'reformersapi',
     logging: true,
-    entities: [Reformer, Episode],
+    entities: [Reformer, Location],
     synchronize: false
 });

@@ -1,24 +1,24 @@
 import { Request, Response, NextFunction } from "express";
 import { client } from '../index';
-import episodeService from "../services/episode.service";
+import locationService from "../services/location.service";
 
-class EpisodeController {
+class LocationController {
 
     async index(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const cachedEpisodes = await client.get('episodes');
-            if (cachedEpisodes) {
-                res.status(200).json(JSON.parse(cachedEpisodes));
+            const cachedLocations = await client.get('locations');
+            if (cachedLocations) {
+                res.status(200).json(JSON.parse(cachedLocations));
                 return;
             }
 
-            const data = await episodeService.index();
+            const data = await locationService.index();
             if (data.length === 0) {
-                res.status(200).json({ message: "No episodes found." });
+                res.status(200).json({ message: "No locations found." });
                 return;
             }
 
-            await client.setEx('episodes', 60, JSON.stringify(data));
+            await client.setEx('locations', 60, JSON.stringify(data));
             res.status(200).json(data);
             
         } catch (error) {
@@ -28,7 +28,7 @@ class EpisodeController {
 
     async store(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data = await episodeService.store(req.body);
+            const data = await locationService.store(req.body);
             res.status(201).json(data);
         } catch (error) {            
             next(error);
@@ -38,7 +38,7 @@ class EpisodeController {
     async show(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
-            const data = await episodeService.show(Number(id));
+            const data = await locationService.show(Number(id));
             res.status(200).json(data);
         } catch (error) {
             next(error);
@@ -48,7 +48,7 @@ class EpisodeController {
     async update(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
-            const data = await episodeService.update(Number(id), req.body);
+            const data = await locationService.update(Number(id), req.body);
             res.status(200).json(data);
         } catch (error) {
             next(error);
@@ -58,7 +58,7 @@ class EpisodeController {
     async destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
-            const message = await episodeService.destroy(Number(id));
+            const message = await locationService.destroy(Number(id));
             res.status(200).json({ message });
         } catch (error) {
             next(error);
@@ -67,4 +67,4 @@ class EpisodeController {
 
 }
 
-export default new EpisodeController();
+export default new LocationController();
