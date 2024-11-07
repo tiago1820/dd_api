@@ -20,7 +20,7 @@ class ReformersController {
 
             await client.setEx('reformers', 60, JSON.stringify(data));
             res.status(200).json(data);
-            
+
         } catch (error) {
             next(error);
         }
@@ -31,8 +31,6 @@ class ReformersController {
             const data = await reformerService.store(req.body);
             res.status(201).json(data);
         } catch (error) {
-            console.log("AQUI: ", error);
-            
             next(error);
         }
     }
@@ -62,6 +60,26 @@ class ReformersController {
         try {
             const message = await reformerService.destroy(Number(id));
             res.status(200).json({ message });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async setPlaceOfBirth(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const { location_id, reformer_id } = req.body;
+        try {
+            const data = await reformerService.setPlaceOfBirth(Number(reformer_id), Number(location_id));
+            res.status(200).json(data);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async setPlaceOfDeath(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const { location_id, reformer_id } = req.body;
+        try {
+            const data = await reformerService.setPlaceOfDeath(Number(reformer_id), Number(location_id));
+            res.status(200).json(data);
         } catch (error) {
             next(error);
         }

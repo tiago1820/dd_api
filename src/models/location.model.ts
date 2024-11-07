@@ -26,8 +26,8 @@ export class Location extends BaseEntity {
     @CreateDateColumn()
     createdAt: Date;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+    // @UpdateDateColumn()
+    // updatedAt: Date;
 
     @OneToMany(() => Reformer, (reformer) => reformer.placeOfBirth)
     reformersBornHere: Reformer[];

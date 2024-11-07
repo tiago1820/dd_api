@@ -2,9 +2,6 @@ import { Location } from '../models/location.model';
 
 interface LocationType {
     name: string;
-    air_date: string;
-    episode_code: string;
-    url: string;
 }
 
 class LocationService {
@@ -14,17 +11,17 @@ class LocationService {
             const data = await Location.find();
             return data;
         } catch (error) {
-            throw new Error("Error retrieving episodes from the database");
+            throw new Error("Error retrieving locations from the database");
         }
     }
 
-    async store(episode: LocationType) {
+    async store(location: LocationType) {
         try {
-            const newLocation = Location.create(episode);
+            const newLocation = Location.create(location);
             await newLocation.save();
             return newLocation;
         } catch (error) {
-            throw new Error("Error saving the episode to the database");
+            throw new Error("Error saving the location to the database");
         }
     }
 
@@ -32,11 +29,11 @@ class LocationService {
         try {
             const data = await Location.findOneBy({ id });
             if (!data) {
-                throw new Error(`Episode with id ${id} not found.`);
+                throw new Error(`Location with id ${id} not found.`);
             }
             return data;
         } catch (error) {
-            throw new Error(`Error retrieving episode with id ${id} from database`)
+            throw new Error(`Error retrieving location with id ${id} from database`)
         }
     }
 
@@ -49,7 +46,7 @@ class LocationService {
             await Location.update({ id }, body);
             return { ...location, ...body };
         } catch (error) {
-            throw new Error('Error editing episode in database');
+            throw new Error('Error editing location in database');
         }
     }
 
@@ -60,9 +57,9 @@ class LocationService {
                 throw new Error('Reformer not found.');
             }
             await Location.remove(location);
-            return `Episode ${location.name} was deleted successfuly.`
+            return `Location ${location.name} was deleted successfuly.`
         } catch (error) {
-            throw new Error('Error deleting a episode in the database');
+            throw new Error('Error deleting a location in the database');
         }
     }
 
