@@ -2,7 +2,9 @@
   <img src="https://www.worldhistory.org/uploads/images/14847.jpg?v=1709243469-0" alt="Descripción de la imagen">
 </p>
 
-*Original image by Henri Bouchard and Paul Landowski, uploaded by Celina Bebenek, published on November 11, 2021. Licensed under Creative Commons Attribution-ShareAlike (CC BY-SA). This license allows remixing, tweaking, and building upon the work, even for commercial purposes, as long as the original authors are credited and new creations are licensed under identical terms. Link to original content: https://www.worldhistory.org/image/14847/reformation-wall/.*
+<p align="center">
+  <a href="https://commons.wikimedia.org/wiki/File:ReformationsdenkmalGenf1.jpg">Reformation Wall</a> by <a href="https://www.picswiss.ch/Genf/GE-05-1.jpg">Roland Zumbühl</a>, licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.
+</p>
 
 ## Project Structure
 
