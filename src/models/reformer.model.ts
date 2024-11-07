@@ -16,19 +16,16 @@ export class Reformer extends BaseEntity {
     name: String;
 
     @Column()
-    status: String;
+    born: String;
 
     @Column()
-    species: String;
+    died: String;
 
     @Column()
-    gender: String;
+    placeOfBirth: String;
 
     @Column()
-    image: String;
-
-    @Column()
-    episode: String;
+    placeOfDeath: String;
 
     @Column()
     url: String;
