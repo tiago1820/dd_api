@@ -3,9 +3,12 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
+import { Location } from "./location.model";
 
 @Entity('reformers')
 export class Reformer extends BaseEntity {
@@ -22,12 +25,6 @@ export class Reformer extends BaseEntity {
     died: String;
 
     @Column()
-    placeOfBirth: String;
-
-    @Column()
-    placeOfDeath: String;
-
-    @Column()
     url: String;
 
     @CreateDateColumn()
@@ -35,5 +32,13 @@ export class Reformer extends BaseEntity {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @ManyToOne(() => Location, (location) => location.reformersBornHere)
+    @JoinColumn({ name: 'placeOfBirth' })
+    placeOfBirth: Location;
+
+    @ManyToOne(() => Location, (location) => location.reformersDiedHere)
+    @JoinColumn({ name: 'placeOfDeath' })
+    placeOfDeath: Location;
 
 }
