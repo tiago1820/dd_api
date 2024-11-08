@@ -19,6 +19,7 @@ app.get('/api', (req: Request, res: Response) => {
 
 app.use('/reformers', reformersRoutes);
 app.use('/locations', locationRoutes);
+app.use('/files', express.static('uploads'));
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err);
