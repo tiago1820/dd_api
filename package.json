@@ -21,9 +21,11 @@
     "typescript": "5.6.3"
   },
   "dependencies": {
+    "@types/multer": "^1.4.12",
     "cors": "2.8.5",
     "express": "4.21.1",
     "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "3.11.3",
     "redis": "^4.7.0",
     "reflect-metadata": "0.2.2",

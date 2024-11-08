@@ -11,5 +11,5 @@ export const AppDataSource = new DataSource({
     database: 'reformersapi',
     logging: true,
     entities: [Reformer, Location],
-    synchronize: true
+    synchronize: false
 });

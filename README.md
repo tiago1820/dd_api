@@ -16,12 +16,17 @@ src                                 # Root directory of the source code
 ├── app.ts                          # Configuration and initialization of the application
 ├── controllers                     # Controllers to handle business logic
 │   └── reformers.controller.ts     # Controller for reformers
+│   └── locations.controller.ts     # Controller for locations
 ├── databases                       # Database connection handling
 │   └── connection.ts               # Database connection configuration
 ├── models                          # Definition of data models
 │   └── reformer.model.ts           # Model for reformer
+│   └── location.model.ts           # Model for location
 ├── services                        # Contains business logic and database interactions
 │   └── reformers.services.ts       # Handles operations related to reformers
+│   └── locations.services.ts       # Handles operations related to locations
 └── routes                          # Definition of API routes
     └── reformers.routes.ts         # Routes for reformers
+    └── locations.routes.ts         # Routes for locations
+
 ```

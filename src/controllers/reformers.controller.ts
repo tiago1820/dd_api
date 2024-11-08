@@ -28,6 +28,11 @@ class ReformersController {
 
     async store(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            console.log("AQUI: ", req.file?.filename);
+            
+            res.json(req.file?.filename);
+
+
             const data = await reformerService.store(req.body);
             res.status(201).json(data);
         } catch (error) {
