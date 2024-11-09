@@ -24,14 +24,14 @@ export class Reformer extends BaseEntity {
     @Column()
     died: String;
 
-    @Column()
-    url: String;
+    @Column({ nullable: true })
+    url?: String;
+
+    @Column({ nullable: true })
+    image?: String;
 
     @CreateDateColumn()
     createdAt: Date;
-
-    // @UpdateDateColumn()
-    // updatedAt: Date;
 
     @ManyToOne(() => Location, (location) => location.reformersBornHere)
     @JoinColumn({ name: 'placeOfBirth' })

@@ -10,7 +10,7 @@ async function main() {
         console.log('Database conected');
 
         await client.connect();
-        app.listen(3000, () => {
+        app.listen(3001, () => {
             console.log('Server conected');
         });
     } catch (error) {
