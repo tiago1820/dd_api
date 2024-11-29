@@ -67,6 +67,10 @@ class ReformerService {
 
     async update(id: number, body: ReformerType) {
         try {
+            if(!Object.keys(body).length) {
+                throw new Error("No update values provided.");
+            }
+
             const reformer = await Reformer.findOneBy({ id });
             if (!reformer) {
                 throw new Error('Reformer not found.');
@@ -74,6 +78,8 @@ class ReformerService {
             await Reformer.update({ id }, body);
             return { ...reformer, ...body };
         } catch (error) {
+            console.log("Holy Holy Holy ", error);
+            
             throw new Error('Error editing reformer in database');
         }
     }

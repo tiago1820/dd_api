@@ -36,6 +36,7 @@ class ReformersController {
             const data = await reformerService.store(reformerData);
             res.status(201).json(data);
         } catch (error) {
+            console.log("AQUI: ", error)
             next(error);
         }
     }
@@ -53,8 +54,14 @@ class ReformersController {
     async update(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
-            const data = await reformerService.update(Number(id), req.body);
+            const reformerData = {
+                ...req.body,
+                ...(req.file && {image: `http://localhost:3001/files/${req.file.filename}`}),
+            };
+
+            const data = await reformerService.update(Number(id), reformerData);
             res.status(200).json(data);
+            
         } catch (error) {
             next(error);
         }
