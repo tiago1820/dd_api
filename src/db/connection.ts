@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
     port: 3306,
     username: 'tiago',
     password: '123456',
-    database: 'reformersapi',
+    database: 'reformers',
     logging: true,
     entities: [Reformer, Location],
     synchronize: false
