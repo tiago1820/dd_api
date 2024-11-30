@@ -14,6 +14,7 @@ The project follows a specific structure to organize its files and directories.
 src                                 # Root directory of the source code
 ├── index.ts                        # Entry point of the application
 ├── app.ts                          # Configuration and initialization of the application
+├── multer-config.ts                # Configure file storage on the server:
 ├── controllers                     # Controllers to handle business logic
 │   └── reformers.controller.ts     # Controller for reformers
 │   └── locations.controller.ts     # Controller for locations
