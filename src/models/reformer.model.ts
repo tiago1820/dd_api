@@ -24,8 +24,8 @@ export class Reformer extends BaseEntity {
     @Column()
     died: String;
 
-    @Column({ nullable: true })
-    url?: String;
+    // @Column({ nullable: true })
+    // url?: String;
 
     @Column({ nullable: true })
     image?: String;

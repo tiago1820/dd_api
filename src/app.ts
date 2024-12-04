@@ -11,16 +11,9 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors());
 
-// app.get('/api', (req: Request, res: Response) => {
-//     const data = {
-//         "reformers": "http://localhost:3000/api/reformers",
-//     }
-//     res.send(data);
-// });
-
 app.use('/api', apiRoutes);
-app.use('/reformers', reformersRoutes);
-app.use('/locations', locationRoutes);
+app.use('/api/reformer', reformersRoutes);
+app.use('/api/location', locationRoutes);
 app.use('/files', express.static('uploads'));
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

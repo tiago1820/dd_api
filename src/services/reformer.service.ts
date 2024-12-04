@@ -77,9 +77,7 @@ class ReformerService {
             }
             await Reformer.update({ id }, body);
             return { ...reformer, ...body };
-        } catch (error) {
-            console.log("Holy Holy Holy ", error);
-            
+        } catch (error) {            
             throw new Error('Error editing reformer in database');
         }
     }

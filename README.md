@@ -16,6 +16,7 @@ src                                 # Root directory of the source code
 ├── app.ts                          # Configuration and initialization of the application
 ├── multer-config.ts                # Configure file storage on the server:
 ├── controllers                     # Controllers to handle business logic
+|   └── api.controller.ts           # API Information
 │   └── reformers.controller.ts     # Controller for reformers
 │   └── locations.controller.ts     # Controller for locations
 ├── databases                       # Database connection handling

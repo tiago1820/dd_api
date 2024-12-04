@@ -30,7 +30,7 @@ class LocationController {
         try {
             const data = await locationService.store(req.body);
             res.status(201).json(data);
-        } catch (error) {            
+        } catch (error) {         
             next(error);
         }
     }

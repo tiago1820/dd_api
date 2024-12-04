@@ -13,13 +13,44 @@ class ReformersController {
             }
 
             const data = await reformerService.index();
+
             if (data.length === 0) {
                 res.status(200).json({ message: "No reformers found." });
                 return;
             }
 
-            await client.setEx('reformers', 60, JSON.stringify(data));
-            res.status(200).json(data);
+            const transformedData = {
+                info: {
+                    count: data.length,
+                    pages: 1,
+                    next: null,
+                    prev: null,
+                },
+                results: data.map((reformer) => ({
+                    id: reformer.id,
+                    name: reformer.name,
+                    born: reformer.born,
+                    died: reformer.died,
+                    url: `http://localhost:3001/api/reformer/${reformer.id}`,
+                    image: reformer.image,
+                    created: reformer.createdAt,
+                    placeOfBirth: reformer.placeOfBirth
+                        ? {
+                            name: reformer.placeOfBirth.name,
+                            url: `http://localhost:3001/api/location/${reformer.placeOfBirth.id}`
+                        }
+                        : null,
+                    placeOfDeath: reformer.placeOfDeath
+                        ? {
+                            name: reformer.placeOfDeath.name,
+                            url: `http://localhost:3001/api/location/${reformer.placeOfDeath.id}`
+                        }
+                        : null,
+                })),
+            };
+
+            await client.setEx('reformers', 60, JSON.stringify(transformedData));
+            res.status(200).json(transformedData);
 
         } catch (error) {
             next(error);
@@ -36,7 +67,6 @@ class ReformersController {
             const data = await reformerService.store(reformerData);
             res.status(201).json(data);
         } catch (error) {
-            console.log("AQUI: ", error)
             next(error);
         }
     }
@@ -56,12 +86,12 @@ class ReformersController {
         try {
             const reformerData = {
                 ...req.body,
-                ...(req.file && {image: `http://localhost:3001/files/${req.file.filename}`}),
+                ...(req.file && { image: `http://localhost:3001/files/${req.file.filename}` }),
             };
 
             const data = await reformerService.update(Number(id), reformerData);
             res.status(200).json(data);
-            
+
         } catch (error) {
             next(error);
         }
