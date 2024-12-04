@@ -1,5 +1,5 @@
 import app from './app';
-import { AppDataSource } from './db/connection';
+import { AppDataSource } from './databases/connection';
 import { createClient } from 'redis';
 
 const client = createClient();

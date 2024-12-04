@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import apiRoutes from './routes/api.routes';
 import reformersRoutes from './routes/reformers.routes';
 import locationRoutes from './routes/locations.routes';
 
@@ -10,13 +11,14 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors());
 
-app.get('/api', (req: Request, res: Response) => {
-    const data = {
-        "reformers": "http://localhost:3000/api/reformers",
-    }
-    res.send(data);
-});
+// app.get('/api', (req: Request, res: Response) => {
+//     const data = {
+//         "reformers": "http://localhost:3000/api/reformers",
+//     }
+//     res.send(data);
+// });
 
+app.use('/api', apiRoutes);
 app.use('/reformers', reformersRoutes);
 app.use('/locations', locationRoutes);
 app.use('/files', express.static('uploads'));
