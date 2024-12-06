@@ -11,9 +11,11 @@ interface ReformerType {
 
 class ReformerService {
 
-    async index() {
+    async index(page: number, limit: number) {
         try {
-            const data = await Reformer.createQueryBuilder('reformer')
+            const offset = (page - 1) * limit;
+            
+            const [data, total] = await Reformer.createQueryBuilder('reformer')
                 .leftJoinAndSelect('reformer.placeOfBirth', 'placeOfBirth')
                 .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath')
                 .select([
@@ -23,9 +25,11 @@ class ReformerService {
                     'placeOfDeath.id',
                     'placeOfDeath.name'
                 ])
-                .getMany();
+                .skip(offset)
+                .take(limit)
+                .getManyAndCount();
 
-            return data;
+            return { data, total };
         } catch (error) {
             throw new Error("Error retrieving reformers from the database");
         }
@@ -67,7 +71,7 @@ class ReformerService {
 
     async update(id: number, body: ReformerType) {
         try {
-            if(!Object.keys(body).length) {
+            if (!Object.keys(body).length) {
                 throw new Error("No update values provided.");
             }
 
@@ -77,7 +81,7 @@ class ReformerService {
             }
             await Reformer.update({ id }, body);
             return { ...reformer, ...body };
-        } catch (error) {            
+        } catch (error) {
             throw new Error('Error editing reformer in database');
         }
     }

@@ -6,25 +6,31 @@ class ReformersController {
 
     async index(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const cachedReformers = await client.get('reformers');
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = 20;
+
+            const cachekey = `reformers_page_${page}_limit_${limit}`;
+            const cachedReformers = await client.get(cachekey);
             if (cachedReformers) {
                 res.status(200).json(JSON.parse(cachedReformers));
                 return;
             }
 
-            const data = await reformerService.index();
+            const { data, total } = await reformerService.index(page, limit);
 
             if (data.length === 0) {
                 res.status(200).json({ message: "No reformers found." });
                 return;
             }
 
+            const totalPages = Math.ceil(total / limit);
+
             const transformedData = {
                 info: {
-                    count: data.length,
-                    pages: 1,
-                    next: null,
-                    prev: null,
+                    count: total,
+                    pages: totalPages,
+                    next: page < totalPages ? `http://localhost:3001/api/reformer?page=${page + 1}` : null,
+                    prev: page > 1 ? `http://localhost:3001/api/reformer?page=${page - 1}` : null,
                 },
                 results: data.map((reformer) => ({
                     id: reformer.id,
@@ -49,7 +55,7 @@ class ReformersController {
                 })),
             };
 
-            await client.setEx('reformers', 60, JSON.stringify(transformedData));
+            await client.setEx(cachekey, 60, JSON.stringify(transformedData));
             res.status(200).json(transformedData);
 
         } catch (error) {
