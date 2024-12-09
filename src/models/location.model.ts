@@ -17,12 +17,6 @@ export class Location extends BaseEntity {
     @Column()
     name: String;
 
-    // @Column({ nullable: true })
-    // bornHere?: String;
-
-    // @Column({ nullable: true })
-    // diedHere?: String;
-
     @CreateDateColumn()
     createdAt: Date;
 
