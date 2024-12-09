@@ -6,10 +6,37 @@ interface LocationType {
 
 class LocationService {
 
-    async index() {
+    async index(page: number, limit: number) {
         try {
-            const data = await Location.find();
-            return data;
+            const [data, total] = await Location.findAndCount({
+                relations: ["reformersBornHere", "reformersDiedHere"],
+                skip: (page - 1) * limit,
+                take: limit,
+            });
+
+            const pages = Math.ceil(total / limit);
+
+            const results = data.map(location => ({
+                id: location.id,
+                name: location.name,
+                reformersBornHere: [
+                    ...location.reformersBornHere.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                ],
+                reformersDiedHere: [
+                    ...location.reformersDiedHere.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                ],
+                created: location.createdAt.toISOString(),
+            }));
+
+            return {
+                info: {
+                    count: total, pages,
+                    next: page < pages ? `http://localhost:3001/api/location?page=${page + 1}` : null,
+                    prev: page > 1 ? `http://localhost:3001/api/location?page=${page - 1}` : null,
+                },
+                results,
+            };
+
         } catch (error) {
             throw new Error("Error retrieving locations from the database");
         }

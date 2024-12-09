@@ -6,21 +6,20 @@ class LocationController {
 
     async index(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const cachedLocations = await client.get('locations');
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+
+            const cachedLocations = await client.get(`locations?page=${page}&limit=${limit}`);
             if (cachedLocations) {
                 res.status(200).json(JSON.parse(cachedLocations));
                 return;
             }
 
-            const data = await locationService.index();
-            if (data.length === 0) {
-                res.status(200).json({ message: "No locations found." });
-                return;
-            }
+            const data = await locationService.index(page, limit);
 
-            await client.setEx('locations', 60, JSON.stringify(data));
+            await client.setEx(`locations?page=${page}&limit=${limit}`, 60, JSON.stringify(data));
             res.status(200).json(data);
-            
+
         } catch (error) {
             next(error);
         }
@@ -30,7 +29,7 @@ class LocationController {
         try {
             const data = await locationService.store(req.body);
             res.status(201).json(data);
-        } catch (error) {         
+        } catch (error) {
             next(error);
         }
     }
