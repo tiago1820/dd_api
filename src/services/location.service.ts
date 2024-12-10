@@ -52,15 +52,27 @@ class LocationService {
         }
     }
 
-    async show(id: number) {
+    async show(ids: number[]) {
         try {
-            const data = await Location.findOneBy({ id });
-            if (!data) {
-                throw new Error(`Location with id ${id} not found.`);
+            const data = await Location.find({
+                where: ids.map(id => ({ id })),
+                relations: ["reformersBornHere", "reformersDiedHere"],
+            });
+
+            if (data.length === 0) {
+                throw new Error(`Location with ID(s) ${ids.join(", ")} not found.`);
             }
-            return data;
+
+            return data.map(location => ({
+                id: location.id,
+                name: location.name,
+                reformersBornHere: location.reformersBornHere.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                reformersDiedHere: location.reformersDiedHere.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                created: location.createdAt.toISOString(),
+            }));
+
         } catch (error) {
-            throw new Error(`Error retrieving location with id ${id} from database`)
+            throw new Error(`Error retrieving location(s) with ID(s) ${ids.join(", ")} from database`);
         }
     }
 

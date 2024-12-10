@@ -36,9 +36,20 @@ class LocationController {
 
     async show(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
+
         try {
-            const data = await locationService.show(Number(id));
+            const ids = id.split(",").map(Number);
+            const cachedLocation = await client.get(`location:${id}`);
+            if (cachedLocation) {
+                res.status(200).json(JSON.parse(cachedLocation));
+                return;
+            }
+
+            const data = await locationService.show(ids);
+            await client.setEx(`location:${id}`, 60, JSON.stringify(data));
+
             res.status(200).json(data);
+
         } catch (error) {
             next(error);
         }
