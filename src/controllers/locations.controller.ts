@@ -6,8 +6,16 @@ class LocationController {
 
     async index(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            const { name } = req.query;
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 10;
+
+            if (name) {
+                const names = (name as string).split(',').map(n => n.trim());
+                const data = await locationService.filterByName(names);
+                res.status(200).json(data);
+                return;
+            }
 
             const cachedLocations = await client.get(`locations?page=${page}&limit=${limit}`);
             if (cachedLocations) {
@@ -21,6 +29,8 @@ class LocationController {
             res.status(200).json(data);
 
         } catch (error) {
+            console.log("AQUI: ", error);
+            
             next(error);
         }
     }

@@ -1,3 +1,4 @@
+import { ILike } from 'typeorm';
 import { Location } from '../models/location.model';
 
 interface LocationType {
@@ -99,6 +100,29 @@ class LocationService {
             return `Location ${location.name} was deleted successfuly.`
         } catch (error) {
             throw new Error('Error deleting a location in the database');
+        }
+    }
+
+    async filterByName(names: string[]) {
+        try {
+            const data = await Location.find({
+                where: names.map(name => ({ name: ILike(`%${name}%`) })),
+                relations: ["reformersBornHere", "reformersDiedHere"],
+            });
+
+            if (data.length === 0) {
+                throw new Error(`No locations found for names: ${names.join(", ")} `);
+            }
+
+            return data.map(location => ({
+                id: location.id,
+                name: location.name,
+                reformersBornHere: location.reformersBornHere.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                reformersDiedHere: location.reformersDiedHere.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                created: location.createdAt.toISOString(),
+            }));
+        } catch (error) {
+            throw new Error(`Error retrieving locations with names: ${names.join(", ")} from database`);
         }
     }
 
