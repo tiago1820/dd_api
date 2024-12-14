@@ -49,6 +49,8 @@ class LocationService {
             await newLocation.save();
             return newLocation;
         } catch (error) {
+            console.log("AQUI: ", error);
+
             throw new Error("Error saving the location to the database");
         }
     }

@@ -37,6 +37,7 @@ class ReformersController {
                     name: reformer.name,
                     born: reformer.born,
                     died: reformer.died,
+                    contribution: reformer.contribution,
                     url: `http://localhost:3001/api/reformer/${reformer.id}`,
                     image: reformer.image,
                     created: reformer.createdAt,
@@ -70,7 +71,29 @@ class ReformersController {
                 image: `http://localhost:3001/files/${req.file?.filename}`,
             };
 
-            const data = await reformerService.store(reformerData);
+            const reformer = await reformerService.store(reformerData);
+            const data = {
+                id: reformer.id,
+                name: reformer.name,
+                born: reformer.born,
+                died: reformer.died,
+                contribution: reformer.contribution,
+                url: `http://localhost:3001/api/reformer/${reformer.id}`,
+                image: reformer.image,
+                created: reformer.createdAt,
+                placeOfBirth: reformer.placeOfBirth
+                    ? {
+                        name: reformer.placeOfBirth.name,
+                        url: `http://localhost:3001/api/location/${reformer.placeOfBirth.id}`
+                    }
+                    : null,
+                placeOfDeath: reformer.placeOfDeath
+                    ? {
+                        name: reformer.placeOfDeath.name,
+                        url: `http://localhost:3001/api/location/${reformer.placeOfDeath.id}`
+                    }
+                    : null,
+            }
             res.status(201).json(data);
         } catch (error) {
             next(error);
