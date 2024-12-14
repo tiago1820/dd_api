@@ -6,7 +6,7 @@ interface ReformerType {
     born: string;
     died: string;
     image: string;
-    url: string;
+    contribution: string;
 }
 
 class ReformerService {
@@ -14,7 +14,7 @@ class ReformerService {
     async index(page: number, limit: number) {
         try {
             const offset = (page - 1) * limit;
-            
+
             const [data, total] = await Reformer.createQueryBuilder('reformer')
                 .leftJoinAndSelect('reformer.placeOfBirth', 'placeOfBirth')
                 .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath')
@@ -31,6 +31,8 @@ class ReformerService {
 
             return { data, total };
         } catch (error) {
+            console.log("AQUI: ", error);
+            
             throw new Error("Error retrieving reformers from the database");
         }
     }
