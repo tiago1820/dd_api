@@ -6,8 +6,16 @@ class ReformersController {
 
     async index(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            const { name } = req.query;
             const page = parseInt(req.query.page as string) || 1;
             const limit = 20;
+
+            if (name) {
+                const names = (name as string).split(',').map(n => n.trim());
+                const data = await reformerService.filterByName(names);
+                res.status(200).json(data);
+                return;
+            }
 
             const cachekey = `reformers_page_${page}_limit_${limit}`;
             const cachedReformers = await client.get(cachekey);
@@ -103,7 +111,15 @@ class ReformersController {
     async show(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
-            const data = await reformerService.show(Number(id));
+            const ids = id.split(",").map(Number);
+            const cachedData = await client.get(`reformers:${id}`);
+            if (cachedData) {
+                res.status(200).json(JSON.parse(cachedData));
+                return;
+            }
+
+            const data = await reformerService.show(ids);
+            await client.setEx(`reformers:${id}`, 60, JSON.stringify(data));
             res.status(200).json(data);
         } catch (error) {
             next(error);

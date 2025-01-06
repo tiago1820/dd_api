@@ -32,7 +32,7 @@ class ReformerService {
             return { data, total };
         } catch (error) {
             console.log("AQUI: ", error);
-            
+
             throw new Error("Error retrieving reformers from the database");
         }
     }
@@ -47,29 +47,34 @@ class ReformerService {
         }
     }
 
-    async show(id: number) {
+    async show(ids: number[]) {
         try {
-            const data = await Reformer.createQueryBuilder('reformer')
+            const queryBuilder = Reformer.createQueryBuilder('reformer')
                 .leftJoinAndSelect('reformer.placeOfBirth', 'placeOfBirth')
-                .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath')
-                .where('reformer.id = :id', { id })
+                .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath');
+    
+            queryBuilder.where('reformer.id IN (:...ids)', { ids });
+    
+            const data = await queryBuilder
                 .select([
                     'reformer',
                     'placeOfBirth.id',
                     'placeOfBirth.name',
                     'placeOfDeath.id',
-                    'placeOfDeath.name'
+                    'placeOfDeath.name',
                 ])
-                .getOne();
-
-            if (!data) {
-                throw new Error(`Reformer with id ${id} not found.`);
+                .getMany();
+    
+            if (!data.length) {
+                throw new Error(`No reformers found for the given IDs.`);
             }
+    
             return data;
         } catch (error) {
-            throw new Error(`Error retrieving Reformer with id ${id} from database`)
+            throw new Error(`Error retrieving reformers by IDs from the database.`);
         }
     }
+    
 
     async update(id: number, body: ReformerType) {
         try {
@@ -184,6 +189,38 @@ class ReformerService {
             throw new Error('Error associating the location with the reformer.');
         }
     }
+
+    async filterByName(names: string[]) {
+        try {
+            const queryBuilder = Reformer.createQueryBuilder('reformer')
+                .leftJoinAndSelect('reformer.placeOfBirth', 'placeOfBirth')
+                .leftJoinAndSelect('reformer.placeOfDeath', 'placeOfDeath');
+
+            names.forEach((name, index) => {
+                const paramName = `name${index}`;
+                queryBuilder.orWhere(`reformer.name LIKE :${paramName}`, { [paramName]: `%${name}%` });
+            });
+
+            const data = await queryBuilder
+                .select([
+                    'reformer',
+                    'placeOfBirth.id',
+                    'placeOfBirth.name',
+                    'placeOfDeath.id',
+                    'placeOfDeath.name',
+                ])
+                .getMany();
+
+            if (data.length === 0) {
+                return { message: "No reformers found with the given names." };
+            }
+
+            return data;
+        } catch (error) {
+            throw new Error('Error filtering reformers by name.');
+        }
+    }
+
 
 }
 
