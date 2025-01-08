@@ -8,8 +8,8 @@ export interface ReformerType {
     born: string;
     died: string;
     contribution?: string;
-    imageId?: number;  
-    birthPlaceId?: number;  
+    imageId?: number;
+    birthPlaceId?: number;
     deathPlaceId?: number;
 }
 
@@ -59,15 +59,14 @@ class ReformerService {
             born: reformer.born,
             died: reformer.died,
             contribution: reformer.contribution,
-            image: reformer.imageId ? { id: reformer.imageId } : undefined,  
-            birthPlace: reformer.birthPlaceId ? { id: reformer.birthPlaceId } : null,  
-            deathPlace: reformer.deathPlaceId ? { id: reformer.deathPlaceId } : null,  
+            image: reformer.imageId ? { id: reformer.imageId } : undefined,
+            birthPlace: reformer.birthPlaceId ? { id: reformer.birthPlaceId } : null,
+            deathPlace: reformer.deathPlaceId ? { id: reformer.deathPlaceId } : null,
         });
-    
+
         await Reformer.save(newReformer);
         return newReformer;
     }
-    
 
     async show(ids: number[]) {
         try {
@@ -107,51 +106,55 @@ class ReformerService {
 
     }
 
-
     async update(id: number, body: ReformerType): Promise<Reformer | null> {
         const reformer = await Reformer.findOne({
             where: { id },
             relations: ["image", "birthPlace", "deathPlace"],
         });
-    
+
         if (!reformer) {
             return null;
         }
-    
+
         reformer.name = body.name ?? reformer.name;
         reformer.born = body.born ?? reformer.born;
         reformer.died = body.died ?? reformer.died;
         reformer.contribution = body.contribution ?? reformer.contribution;
-    
+
         if (body.imageId) {
             reformer.image = await Image.findOne({ where: { id: body.imageId } }) ?? undefined;
         }
-    
+
         if (body.birthPlaceId) {
             reformer.birthPlace = await Location.findOne({ where: { id: body.birthPlaceId } }) ?? null;
         }
-    
+
         if (body.deathPlaceId) {
             reformer.deathPlace = await Location.findOne({ where: { id: body.deathPlaceId } }) ?? null;
         }
-    
+
         await Reformer.save(reformer);
-    
+
         return reformer;
     }
-    
 
-    async destroy(id: number) {
-        // try {
-        //     const reformer = await Reformer.findOneBy({ id });
-        //     if (!reformer) {
-        //         throw new Error('Reformer not found.');
-        //     }
-        //     await Reformer.remove(reformer);
-        //     return `Reformer ${reformer.name} was deleted successfuly.`
-        // } catch (error) {
-        //     throw new Error('Error deleting a reformer in the database');
-        // }
+    async destroy(id: number): Promise<boolean> {
+        const reformer = await Reformer.findOne({
+            where: { id },
+            relations: ["image"],
+        });
+
+        if (!reformer) {
+            return false;
+        }
+
+        if (reformer.image) {
+            await Image.delete(reformer.image.id);
+        }
+
+        await Reformer.remove(reformer);
+
+        return true;
     }
 
     async setPlaceOfBirth(reformer_id: number, location_id: number) {
@@ -159,27 +162,27 @@ class ReformerService {
             const location = await Location.findOne({
                 where: { id: location_id },
             });
-    
+
             if (!location) {
                 throw new Error('Location not found.');
             }
-    
+
             const reformer = await Reformer.findOne({
                 where: { id: reformer_id },
-                relations: ['birthPlace', 'deathPlace'], 
+                relations: ['birthPlace', 'deathPlace'],
             });
-    
+
             if (!reformer) {
                 throw new Error('Reformer not found.');
             }
-    
+
             reformer.birthPlace = location;
-    
+
             await reformer.save();
-    
+
             const updatedReformer = await Reformer.findOne({
                 where: { id: reformer_id },
-                relations: ['birthPlace', 'deathPlace'], 
+                relations: ['birthPlace', 'deathPlace'],
                 select: {
                     id: true,
                     name: true,
@@ -193,44 +196,43 @@ class ReformerService {
                     },
                 },
             });
-    
+
             if (!updatedReformer) {
                 throw new Error('Failed to fetch updated reformer.');
             }
-    
+
             return updatedReformer;
         } catch (error) {
             throw new Error(`Error associating the location with the reformer.`);
         }
     }
-    
 
     async setPlaceOfDeath(reformer_id: number, location_id: number) {
         try {
             const location = await Location.findOne({
                 where: { id: location_id },
             });
-    
+
             if (!location) {
                 throw new Error('Location not found.');
             }
-    
+
             const reformer = await Reformer.findOne({
                 where: { id: reformer_id },
                 relations: ['birthPlace', 'deathPlace'],
             });
-    
+
             if (!reformer) {
                 throw new Error('Reformer not found.');
             }
-    
+
             reformer.deathPlace = location;
-    
+
             await reformer.save();
-    
+
             const updatedReformer = await Reformer.findOne({
                 where: { id: reformer_id },
-                relations: ['birthPlace', 'deathPlace'], 
+                relations: ['birthPlace', 'deathPlace'],
                 select: {
                     id: true,
                     name: true,
@@ -244,17 +246,16 @@ class ReformerService {
                     },
                 },
             });
-    
+
             if (!updatedReformer) {
                 throw new Error('Failed to fetch updated reformer.');
             }
-    
+
             return updatedReformer;
         } catch (error) {
             throw new Error(`Error associating the location with the reformer.`);
         }
     }
-    
 
     async filterByName(names: string[]): Promise<Reformer[] | { message: string }> {
         try {
