@@ -1,6 +1,7 @@
 import { Like, In } from "typeorm";
 import { Reformer } from '../models/reformer.model';
 import { Location } from '../models/location.model';
+import { Image } from "../models/image.model";
 
 export interface ReformerType {
     name: string;
@@ -76,6 +77,10 @@ class ReformerService {
                 select: {
                     id: true,
                     name: true,
+                    born: true,
+                    died: true,
+                    contribution: true,
+                    createdAt: true,
                     birthPlace: {
                         id: true,
                         name: true,
@@ -103,22 +108,38 @@ class ReformerService {
     }
 
 
-    async update(id: number, body: ReformerType) {
-        // try {
-        //     if (!Object.keys(body).length) {
-        //         throw new Error("No update values provided.");
-        //     }
-
-        //     const reformer = await Reformer.findOneBy({ id });
-        //     if (!reformer) {
-        //         throw new Error('Reformer not found.');
-        //     }
-        //     await Reformer.update({ id }, body);
-        //     return { ...reformer, ...body };
-        // } catch (error) {
-        //     throw new Error('Error editing reformer in database');
-        // }
+    async update(id: number, body: ReformerType): Promise<Reformer | null> {
+        const reformer = await Reformer.findOne({
+            where: { id },
+            relations: ["image", "birthPlace", "deathPlace"],
+        });
+    
+        if (!reformer) {
+            return null;
+        }
+    
+        reformer.name = body.name ?? reformer.name;
+        reformer.born = body.born ?? reformer.born;
+        reformer.died = body.died ?? reformer.died;
+        reformer.contribution = body.contribution ?? reformer.contribution;
+    
+        if (body.imageId) {
+            reformer.image = await Image.findOne({ where: { id: body.imageId } }) ?? undefined;
+        }
+    
+        if (body.birthPlaceId) {
+            reformer.birthPlace = await Location.findOne({ where: { id: body.birthPlaceId } }) ?? null;
+        }
+    
+        if (body.deathPlaceId) {
+            reformer.deathPlace = await Location.findOne({ where: { id: body.deathPlaceId } }) ?? null;
+        }
+    
+        await Reformer.save(reformer);
+    
+        return reformer;
     }
+    
 
     async destroy(id: number) {
         // try {

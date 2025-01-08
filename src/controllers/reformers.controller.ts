@@ -120,20 +120,41 @@ class ReformersController {
     }
 
     async update(req: Request, res: Response, next: NextFunction): Promise<void> {
-        // const { id } = req.params;
-        // try {
-        //     const reformerData = {
-        //         ...req.body,
-        //         ...(req.file && { image: `http://localhost:3001/files/${req.file.filename}` }),
-        //     };
-
-        //     const data = await reformerService.update(Number(id), reformerData);
-        //     res.status(200).json(data);
-
-        // } catch (error) {
-        //     next(error);
-        // }
+        try {
+            const { id } = req.params;
+            const reformerId = parseInt(id, 10);
+    
+            if (isNaN(reformerId)) {
+                res.status(400).json({ message: "Invalid Reformer ID" });
+            }
+    
+            let imageId: number | null = null;
+    
+            if (req.file) {
+                const newImage = Image.create({
+                    url: `http://localhost:3001/files/${req.file.filename}`,
+                });
+                await Image.save(newImage);
+                imageId = newImage.id;
+            }
+    
+            const reformerData = {
+                ...req.body,
+                imageId,
+            };
+    
+            const updatedReformer = await reformerService.update(reformerId, reformerData);
+    
+            if (!updatedReformer) {
+                res.status(404).json({ message: "Reformer not found" });
+            }
+    
+            res.status(200).json(updatedReformer);
+        } catch (error) {
+            next(error);
+        }
     }
+    
 
     async destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
         // const { id } = req.params;
