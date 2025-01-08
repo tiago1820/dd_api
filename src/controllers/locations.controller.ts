@@ -37,7 +37,13 @@ class LocationController {
 
     async store(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data = await locationService.store(req.body);
+            const location = req.body;
+
+            if (!location.name) {
+                throw new Error("Location name is required");
+            }
+            
+            const data = await locationService.store(location);
             res.status(201).json(data);
         } catch (error) {
             next(error);

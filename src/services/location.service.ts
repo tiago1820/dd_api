@@ -45,15 +45,21 @@ class LocationService {
     }
 
     async store(location: LocationType) {
-        // try {
-        //     const newLocation = Location.create(location);
-        //     await newLocation.save();
-        //     return newLocation;
-        // } catch (error) {
-        //     console.log("AQUI: ", error);
-
-        //     throw new Error("Error saving the location to the database");
-        // }
+        try {
+            const newLocation = Location.create({
+                name: location.name,
+            });
+    
+            await newLocation.save();
+    
+            return {
+                id: newLocation.id,
+                name: newLocation.name,
+                createdAt: newLocation.createdAt.toISOString(),
+            };
+        } catch (error) {
+            throw new Error("Error saving the location to the database");
+        }
     }
 
     async show(ids: number[]) {
