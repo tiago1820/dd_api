@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { client } from '../index';
 import reformerService from "../services/reformer.service";
+import { Image } from "../models/image.model";
 
 class ReformersController {
 
@@ -11,14 +12,14 @@ class ReformersController {
             const limit = 20;
 
             if (name) {
-                const names = (name as string).split(',').map(n => n.trim());
+                const names = (name as string).split(",").map((n) => n.trim());
                 const data = await reformerService.filterByName(names);
                 res.status(200).json(data);
                 return;
             }
 
-            const cachekey = `reformers_page_${page}_limit_${limit}`;
-            const cachedReformers = await client.get(cachekey);
+            const cacheKey = `reformers_page_${page}_limit_${limit}`;
+            const cachedReformers = await client.get(cacheKey);
             if (cachedReformers) {
                 res.status(200).json(JSON.parse(cachedReformers));
                 return;
@@ -47,62 +48,50 @@ class ReformersController {
                     died: reformer.died,
                     contribution: reformer.contribution,
                     url: `http://localhost:3001/api/reformer/${reformer.id}`,
-                    image: reformer.image,
+                    image: reformer.image ? reformer.image.url : null,
                     created: reformer.createdAt,
-                    placeOfBirth: reformer.placeOfBirth
+                    placeOfBirth: reformer.birthPlace
                         ? {
-                            name: reformer.placeOfBirth.name,
-                            url: `http://localhost:3001/api/location/${reformer.placeOfBirth.id}`
+                            name: reformer.birthPlace.name,
+                            url: `http://localhost:3001/api/location/${reformer.birthPlace.id}`,
                         }
                         : null,
-                    placeOfDeath: reformer.placeOfDeath
+                    placeOfDeath: reformer.deathPlace
                         ? {
-                            name: reformer.placeOfDeath.name,
-                            url: `http://localhost:3001/api/location/${reformer.placeOfDeath.id}`
+                            name: reformer.deathPlace.name,
+                            url: `http://localhost:3001/api/location/${reformer.deathPlace.id}`,
                         }
                         : null,
                 })),
             };
 
-            await client.setEx(cachekey, 60, JSON.stringify(transformedData));
+            await client.setEx(cacheKey, 60, JSON.stringify(transformedData));
             res.status(200).json(transformedData);
 
         } catch (error) {
             next(error);
         }
+
     }
 
     async store(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            let imageId: number | null = null;
+            if (req.file) {
+                const newImage = Image.create({
+                    url: `http://localhost:3001/files/${req.file.filename}`,
+                });
+                await Image.save(newImage); 
+                imageId = newImage.id; 
+            }
+    
             const reformerData = {
                 ...req.body,
-                image: `http://localhost:3001/files/${req.file?.filename}`,
+                imageId,
             };
-
-            const reformer = await reformerService.store(reformerData);
-            const data = {
-                id: reformer.id,
-                name: reformer.name,
-                born: reformer.born,
-                died: reformer.died,
-                contribution: reformer.contribution,
-                url: `http://localhost:3001/api/reformer/${reformer.id}`,
-                image: reformer.image,
-                created: reformer.createdAt,
-                placeOfBirth: reformer.placeOfBirth
-                    ? {
-                        name: reformer.placeOfBirth.name,
-                        url: `http://localhost:3001/api/location/${reformer.placeOfBirth.id}`
-                    }
-                    : null,
-                placeOfDeath: reformer.placeOfDeath
-                    ? {
-                        name: reformer.placeOfDeath.name,
-                        url: `http://localhost:3001/api/location/${reformer.placeOfDeath.id}`
-                    }
-                    : null,
-            }
-            res.status(201).json(data);
+    
+            const newReformer = await reformerService.store(reformerData);
+            res.status(201).json(newReformer);
         } catch (error) {
             next(error);
         }
@@ -110,6 +99,7 @@ class ReformersController {
 
     async show(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
+
         try {
             const ids = id.split(",").map(Number);
             const cachedData = await client.get(`reformers:${id}`);
@@ -119,37 +109,40 @@ class ReformersController {
             }
 
             const data = await reformerService.show(ids);
+
             await client.setEx(`reformers:${id}`, 60, JSON.stringify(data));
             res.status(200).json(data);
+
+
         } catch (error) {
             next(error);
         }
     }
 
     async update(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const { id } = req.params;
-        try {
-            const reformerData = {
-                ...req.body,
-                ...(req.file && { image: `http://localhost:3001/files/${req.file.filename}` }),
-            };
+        // const { id } = req.params;
+        // try {
+        //     const reformerData = {
+        //         ...req.body,
+        //         ...(req.file && { image: `http://localhost:3001/files/${req.file.filename}` }),
+        //     };
 
-            const data = await reformerService.update(Number(id), reformerData);
-            res.status(200).json(data);
+        //     const data = await reformerService.update(Number(id), reformerData);
+        //     res.status(200).json(data);
 
-        } catch (error) {
-            next(error);
-        }
+        // } catch (error) {
+        //     next(error);
+        // }
     }
 
     async destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const { id } = req.params;
-        try {
-            const message = await reformerService.destroy(Number(id));
-            res.status(200).json({ message });
-        } catch (error) {
-            next(error);
-        }
+        // const { id } = req.params;
+        // try {
+        //     const message = await reformerService.destroy(Number(id));
+        //     res.status(200).json({ message });
+        // } catch (error) {
+        //     next(error);
+        // }
     }
 
     async setPlaceOfBirth(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -162,6 +155,7 @@ class ReformersController {
         }
     }
 
+
     async setPlaceOfDeath(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { location_id, reformer_id } = req.body;
         try {
@@ -171,6 +165,7 @@ class ReformersController {
             next(error);
         }
     }
+
 
 }
 

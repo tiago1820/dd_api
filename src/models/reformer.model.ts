@@ -9,6 +9,7 @@ import {
     UpdateDateColumn
 } from "typeorm";
 import { Location } from "./location.model";
+import { Image } from "./image.model";
 
 @Entity('reformers')
 export class Reformer extends BaseEntity {
@@ -16,29 +17,30 @@ export class Reformer extends BaseEntity {
     id: number;
 
     @Column()
-    name: String;
+    name: string;
 
     @Column()
-    born: String;
+    born: string;
 
     @Column()
-    died: String;
+    died: string;
 
-    @Column({ nullable: true })
-    image?: String;
-
-    @Column({ nullable: true })
+    @Column()
     contribution?: string;
+
+    @ManyToOne(() => Image, { nullable: true })
+    @JoinColumn({ name: 'imageId' })
+    image?: Image;
+
+    @ManyToOne(() => Location, (location) => location.birthReformers, { nullable: true })
+    @JoinColumn({ name: 'birthPlaceId' })
+    birthPlace: Location | null;
+
+    @ManyToOne(() => Location, (location) => location.deathReformers, { nullable: true })
+    @JoinColumn({ name: 'deathPlaceId' })
+    deathPlace: Location | null;
 
     @CreateDateColumn()
     createdAt: Date;
-
-    @ManyToOne(() => Location, (location) => location.reformersBornHere)
-    @JoinColumn({ name: 'placeOfBirth' })
-    placeOfBirth: Location;
-
-    @ManyToOne(() => Location, (location) => location.reformersDiedHere)
-    @JoinColumn({ name: 'placeOfDeath' })
-    placeOfDeath: Location;
 
 }

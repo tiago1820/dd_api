@@ -5,7 +5,6 @@ import {
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
 } from "typeorm";
 import { Reformer } from "./reformer.model";
 
@@ -15,15 +14,15 @@ export class Location extends BaseEntity {
     id: number;
 
     @Column()
-    name: String;
+    name: string;
+
+    @OneToMany(() => Reformer, (reformer) => reformer.birthPlace)
+    birthReformers: Reformer[];
+
+    @OneToMany(() => Reformer, (reformer) => reformer.deathPlace)
+    deathReformers: Reformer[];
 
     @CreateDateColumn()
     createdAt: Date;
-
-    @OneToMany(() => Reformer, (reformer) => reformer.placeOfBirth)
-    reformersBornHere: Reformer[];
-
-    @OneToMany(() => Reformer, (reformer) => reformer.placeOfDeath)
-    reformersDiedHere: Reformer[];
 
 }

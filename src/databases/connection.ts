@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import { Reformer } from "../models/reformer.model";
 import { Location } from "../models/location.model";
+import { Image } from "../models/image.model";
 import {
     DB_TYPE,
     DB_HOST,
@@ -20,6 +21,6 @@ export const AppDataSource = new DataSource({
     password: DB_PASSWORD,
     database: DB_DATABASE,
     logging: DB_LOGGING,
-    entities: [Reformer, Location],
+    entities: [Reformer, Location, Image],
     synchronize: false
 });
