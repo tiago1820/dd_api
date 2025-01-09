@@ -2,16 +2,7 @@ import { Like, In } from "typeorm";
 import { Reformer } from '../models/reformer.model';
 import { Location } from '../models/location.model';
 import { Image } from "../models/image.model";
-
-export interface ReformerType {
-    name: string;
-    born: string;
-    died: string;
-    contribution?: string;
-    imageId?: number;
-    birthPlaceId?: number;
-    deathPlaceId?: number;
-}
+import { ReformerType } from "../interfaces/reformer.interface";
 
 class ReformerService {
 
