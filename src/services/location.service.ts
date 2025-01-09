@@ -82,41 +82,51 @@ class LocationService {
         }
     }
 
-
     async update(id: number, body: Partial<LocationType>) {
         try {
             const location = await Location.findOne({ where: { id } });
             if (!location) {
                 throw new Error(`Location with ID ${id} not found.`);
             }
-    
+
             if (body.name && (typeof body.name !== "string" || body.name.trim() === "")) {
                 throw new Error("Location name must be a non-empty string.");
             }
-    
+
             await Location.update({ id }, body);
-    
+
             const updatedLocation = await Location.findOne({ where: { id } });
-    
+
             return updatedLocation;
         } catch (error) {
             throw new Error("Error updating location in the database");
         }
     }
-    
 
-    async destroy(id: number) {
-        // try {
-        //     const location = await Location.findOneBy({ id });
-        //     if (!location) {
-        //         throw new Error('Reformer not found.');
-        //     }
-        //     await Location.remove(location);
-        //     return `Location ${location.name} was deleted successfuly.`
-        // } catch (error) {
-        //     throw new Error('Error deleting a location in the database');
-        // }
+    async destroy(id: number): Promise<string> {
+        try {
+            const location = await Location.findOne({
+                where: { id },
+                relations: ["birthReformers", "deathReformers"],
+            });
+
+            if (!location) {
+                throw new Error("Location not found.");
+            }
+
+            if (location.birthReformers.length > 0 || location.deathReformers.length > 0) {
+                throw new Error(
+                    `Location "${location.name}" cannot be deleted because it is associated with reformers.`
+                );
+            }
+
+            await Location.remove(location);
+            return `Location "${location.name}" was deleted successfully.`;
+        } catch (error) {
+            throw new Error(`Error deleting location.`);
+        }
     }
+
 
     async filterByName(names: string[]) {
         // try {

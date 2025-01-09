@@ -86,7 +86,6 @@ class LocationController {
         }
     }
 
-
     async destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
         try {
@@ -96,6 +95,7 @@ class LocationController {
             next(error);
         }
     }
+    
 
 }
 
