@@ -127,29 +127,39 @@ class LocationService {
         }
     }
 
+    async filterByName(names: string[]): Promise<any[]> {
+        try {
+            if (!Array.isArray(names) || names.length === 0) {
+                throw new Error("The 'names' parameter must be a non-empty array of strings.");
+            }
 
-    async filterByName(names: string[]) {
-        // try {
-        //     const data = await Location.find({
-        //         where: names.map(name => ({ name: ILike(`%${name}%`) })),
-        //         relations: ["reformersBornHere", "reformersDiedHere"],
-        //     });
+            const data = await Location.find({
+                where: names.map(name => ({ name: ILike(`%${name}%`) })),
+                relations: ["birthReformers", "deathReformers"],
+            });
 
-        //     if (data.length === 0) {
-        //         throw new Error(`No locations found for names: ${names.join(", ")} `);
-        //     }
+            if (data.length === 0) {
+                throw new Error(`No locations found for names: ${names.join(", ")}.`);
+            }
 
-        //     return data.map(location => ({
-        //         id: location.id,
-        //         name: location.name,
-        //         reformersBornHere: location.reformersBornHere.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
-        //         reformersDiedHere: location.reformersDiedHere.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
-        //         created: location.createdAt.toISOString(),
-        //     }));
-        // } catch (error) {
-        //     throw new Error(`Error retrieving locations with names: ${names.join(", ")} from database`);
-        // }
+            return data.map(location => ({
+                id: location.id,
+                name: location.name,
+                reformersBornHere: location.birthReformers.map(reformer =>
+                    `http://localhost:3001/api/reformer/${reformer.id}`
+                ),
+                reformersDiedHere: location.deathReformers.map(reformer =>
+                    `http://localhost:3001/api/reformer/${reformer.id}`
+                ),
+                created: location.createdAt.toISOString(),
+            }));
+        } catch (error) {
+            throw new Error(
+                `Error retrieving locations with names: ${names.join(", ")}.`
+            );
+        }
     }
+
 
 }
 
