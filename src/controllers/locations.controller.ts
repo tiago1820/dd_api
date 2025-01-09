@@ -30,7 +30,7 @@ class LocationController {
 
         } catch (error) {
             console.log("AQUI: ", error);
-            
+
             next(error);
         }
     }
@@ -42,7 +42,7 @@ class LocationController {
             if (!location.name) {
                 throw new Error("Location name is required");
             }
-            
+
             const data = await locationService.store(location);
             res.status(201).json(data);
         } catch (error) {
@@ -73,13 +73,19 @@ class LocationController {
 
     async update(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
+
         try {
-            const data = await locationService.update(Number(id), req.body);
-            res.status(200).json(data);
+            if (!id || isNaN(Number(id))) {
+                res.status(400).json({ error: "Invalid or missing location ID" });
+            }
+
+            const updatedData = await locationService.update(Number(id), req.body);
+            res.status(200).json(updatedData);
         } catch (error) {
             next(error);
         }
     }
+
 
     async destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;

@@ -1,9 +1,6 @@
 import { ILike } from 'typeorm';
 import { Location } from '../models/location.model';
-
-interface LocationType {
-    name: string;
-}
+import { LocationType } from '../interfaces/location.interface';
 
 class LocationService {
 
@@ -49,9 +46,9 @@ class LocationService {
             const newLocation = Location.create({
                 name: location.name,
             });
-    
+
             await newLocation.save();
-    
+
             return {
                 id: newLocation.id,
                 name: newLocation.name,
@@ -86,18 +83,27 @@ class LocationService {
     }
 
 
-    async update(id: number, body: LocationType) {
-        // try {
-        //     const location = await Location.findOneBy({ id });
-        //     if (!location) {
-        //         throw new Error('Location not found.');
-        //     }
-        //     await Location.update({ id }, body);
-        //     return { ...location, ...body };
-        // } catch (error) {
-        //     throw new Error('Error editing location in database');
-        // }
+    async update(id: number, body: Partial<LocationType>) {
+        try {
+            const location = await Location.findOne({ where: { id } });
+            if (!location) {
+                throw new Error(`Location with ID ${id} not found.`);
+            }
+    
+            if (body.name && (typeof body.name !== "string" || body.name.trim() === "")) {
+                throw new Error("Location name must be a non-empty string.");
+            }
+    
+            await Location.update({ id }, body);
+    
+            const updatedLocation = await Location.findOne({ where: { id } });
+    
+            return updatedLocation;
+        } catch (error) {
+            throw new Error("Error updating location in the database");
+        }
     }
+    
 
     async destroy(id: number) {
         // try {
