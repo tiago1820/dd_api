@@ -22,5 +22,5 @@ export const AppDataSource = new DataSource({
     database: DB_DATABASE,
     logging: DB_LOGGING,
     entities: [Reformer, Location, Image],
-    synchronize: false
+    synchronize: DB_SYNCHRONIZE
 });
