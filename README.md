@@ -346,5 +346,4 @@ If you want to know how to use queries, [check here](#filter-characters).
 ### Connect with me:
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tiago1820/)
-[![Support](https://img.shields.io/badge/Support-Donate-ff69b4?style=for-the-badge)](https://www.paypal.com/donate/tu-link-de-donacion)
-=======
+[![Support](https://img.shields.io/badge/Support-Donate-ff69b4?style=for-the-badge)](https://buymeacoffee.com/tiago1820)
