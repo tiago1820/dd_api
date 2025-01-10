@@ -77,17 +77,17 @@ GET http://localhost:3001/api/reformer/?page=19
   },
   "results": [
     {
-			"id": 2,
-			"name": "JosèBonifacio",
-			"born": "February 13, 1939",
-			"died": "December 14, 2017",
-			"contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
-			"image": null,
-			"placeOfBirth": null,
-			"placeOfDeath": null,
-			"url": "http://localhost:3001/api/reformer/2",
-			"created": "2025-01-07T01:53:14.218Z",
-		},
+      "id": 2,
+      "name": "JosèBonifacio",
+      "born": "February 13, 1939",
+      "died": "December 14, 2017",
+      "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+      "image": null,
+      "placeOfBirth": null,
+      "placeOfDeath": null,
+      "url": "http://localhost:3001/api/reformer/2",
+      "created": "2025-01-07T01:53:14.218Z",
+   },
     // ...
   ]
 }
@@ -112,17 +112,17 @@ GET http://localhost:3001/api/reformer
   },
   "results": [
     {
-			"id": 2,
-			"name": "JosèBonifacio",
-			"born": "February 13, 1939",
-			"died": "December 14, 2017",
-			"contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
-			"image": null,
-			"placeOfBirth": null,
-			"placeOfDeath": null,
-			"url": "http://localhost:3001/api/reformer/2",
-			"created": "2025-01-07T01:53:14.218Z",
-		},
+      "id": 2,
+      "name": "JosèBonifacio",
+      "born": "February 13, 1939",
+      "died": "December 14, 2017",
+      "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+      "image": null,
+      "placeOfBirth": null,
+      "placeOfDeath": null,
+      "url": "http://localhost:3001/api/reformer/2",
+      "created": "2025-01-07T01:53:14.218Z",
+    },
     // ...
   ]
 }
@@ -137,16 +137,16 @@ GET http://localhost:3001/api/reformer/2
 ```
 ```
 {
-	"id": 2,
-	"name": "JosèBonifacio",
-	"born": "February 13, 1939",
-	"died": "December 14, 2017",
-	"contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
-	"image": null,
-	"placeOfBirth": null,
-	"placeOfDeath": null,
-	"url": "http://localhost:3001/api/reformer/2",
-	"created": "2025-01-07T01:53:14.218Z"
+  "id": 2,
+  "name": "JosèBonifacio",
+  "born": "February 13, 1939",
+  "died": "December 14, 2017",
+  "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+  "image": null,
+  "placeOfBirth": null,
+  "placeOfDeath": null,
+  "url": "http://localhost:3001/api/reformer/2",
+  "created": "2025-01-07T01:53:14.218Z"
 }
 ```
 
@@ -209,37 +209,36 @@ GET http://localhost:3001/api/reformer/?name=pedro&born=1939
 ```
 ```
 [
-	{
-		"id": 15,
-		"name": "Mario Pedro",
-		"born": "February 13, 1939",
-		"died": "December 14, 2017",
-		"contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
-		"createdAt": "2025-01-07T01:53:14.218Z",
-		"birthPlace": {
-			"id": 18,
-			"name": "Governador Valadares, Minas Gerais, Brasil"
-		},
-		"deathPlace": {
-			"id": 3,
-			"name": "Sao Carlos, Sao Paulo, Brasil"
-		},
-		"image": null
-	},
-	{
-		"id": 16,
-		"name": "Pedro da Silva",
-		"born": "February 13, 1939",
-		"died": "December 14, 2017",
-		"contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
-		"createdAt": "2025-01-07T01:53:14.218Z",
-		"birthPlace": null,
-		"deathPlace": null,
-		"image": null
-	}
+  {
+    "id": 15,
+    "name": "Mario Pedro",
+    "born": "February 13, 1939",
+    "died": "December 14, 2017",
+    "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+    "createdAt": "2025-01-07T01:53:14.218Z",
+    "birthPlace": {
+      "id": 18,
+	"name": "Governador Valadares, Minas Gerais, Brasil"
+    },
+    "deathPlace": {
+      "id": 3,
+      "name": "Sao Carlos, Sao Paulo, Brasil"
+    },
+    "image": null
+  },
+  {
+    "id": 16,
+    "name": "Pedro da Silva",
+    "born": "February 13, 1939",
+    "died": "December 14, 2017",
+    "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+    "createdAt": "2025-01-07T01:53:14.218Z",
+    "birthPlace": null,
+    "deathPlace": null,
+    "image": null
+  }
 ]
 ```
-
 ### Location
 
 There is a total of 57 locations sorted by id.
@@ -348,3 +347,4 @@ If you want to know how to use queries, [check here](#filter-characters).
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tiago1820/)
 [![Support](https://img.shields.io/badge/Support-Donate-ff69b4?style=for-the-badge)](https://www.paypal.com/donate/tu-link-de-donacion)
+=======
