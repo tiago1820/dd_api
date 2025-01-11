@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { client } from '../index';
 import reformerService from "../services/reformer.service";
 import { Image } from "../models/image.model";
-import { API_URL } from "../constants";
+import { API_URL, IMAGE_URL} from "../constants";
 
 class ReformersController {
 
@@ -80,7 +80,7 @@ class ReformersController {
             let imageId: number | null = null;
             if (req.file) {
                 const newImage = Image.create({
-                    url: `${API_URL}files/${req.file.filename}`,
+                    url: `${IMAGE_URL}${req.file.filename}`,
                 });
                 await Image.save(newImage);
                 imageId = newImage.id;
@@ -133,7 +133,7 @@ class ReformersController {
 
             if (req.file) {
                 const newImage = Image.create({
-                    url: `${API_URL}files/${req.file.filename}`,
+                    url: `${IMAGE_URL}${req.file.filename}`,
                 });
                 await Image.save(newImage);
                 imageId = newImage.id;

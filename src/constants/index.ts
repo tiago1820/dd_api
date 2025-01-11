@@ -10,3 +10,4 @@ export const DB_DATABASE= process.env.DB_DATABASE;
 export const DB_LOGGING= process.env.DB_LOGGING === "true";
 export const DB_SYNCHRONIZE= process.env.DB_SYNCHRONIZE === "false";
 export const API_URL = process.env.API_URL;
+export const IMAGE_URL = process.env.IMAGE_URL;
