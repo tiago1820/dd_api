@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { client } from '../index';
 import reformerService from "../services/reformer.service";
 import { Image } from "../models/image.model";
+import { API_URL, IMAGE_URL} from "../constants";
 
 class ReformersController {
 
@@ -38,8 +39,8 @@ class ReformersController {
                 info: {
                     count: total,
                     pages: totalPages,
-                    next: page < totalPages ? `http://localhost:3001/api/reformer?page=${page + 1}` : null,
-                    prev: page > 1 ? `http://localhost:3001/api/reformer?page=${page - 1}` : null,
+                    next: page < totalPages ? `${API_URL}reformer?page=${page + 1}` : null,
+                    prev: page > 1 ? `${API_URL}reformer?page=${page - 1}` : null,
                 },
                 results: data.map((reformer) => ({
                     id: reformer.id,
@@ -47,19 +48,19 @@ class ReformersController {
                     born: reformer.born,
                     died: reformer.died,
                     contribution: reformer.contribution,
-                    url: `http://localhost:3001/api/reformer/${reformer.id}`,
+                    url: `${API_URL}reformer/${reformer.id}`,
                     image: reformer.image ? reformer.image.url : null,
                     created: reformer.createdAt,
                     placeOfBirth: reformer.birthPlace
                         ? {
                             name: reformer.birthPlace.name,
-                            url: `http://localhost:3001/api/location/${reformer.birthPlace.id}`,
+                            url: `${API_URL}location/${reformer.birthPlace.id}`,
                         }
                         : null,
                     placeOfDeath: reformer.deathPlace
                         ? {
                             name: reformer.deathPlace.name,
-                            url: `http://localhost:3001/api/location/${reformer.deathPlace.id}`,
+                            url: `${API_URL}location/${reformer.deathPlace.id}`,
                         }
                         : null,
                 })),
@@ -82,7 +83,7 @@ class ReformersController {
             let imageId: number | null = null;
             if (req.file) {
                 const newImage = Image.create({
-                    url: `http://localhost:3001/files/${req.file.filename}`,
+                    url: `${IMAGE_URL}${req.file.filename}`,
                 });
                 await Image.save(newImage);
                 imageId = newImage.id;
@@ -135,7 +136,7 @@ class ReformersController {
 
             if (req.file) {
                 const newImage = Image.create({
-                    url: `http://localhost:3001/files/${req.file.filename}`,
+                    url: `${IMAGE_URL}${req.file.filename}`,
                 });
                 await Image.save(newImage);
                 imageId = newImage.id;

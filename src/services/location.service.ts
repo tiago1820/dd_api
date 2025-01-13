@@ -1,6 +1,7 @@
 import { ILike } from 'typeorm';
 import { Location } from '../models/location.model';
 import { LocationType } from '../interfaces/location.interface';
+import { API_URL } from '../constants';
 
 class LocationService {
 
@@ -18,10 +19,10 @@ class LocationService {
                 id: location.id,
                 name: location.name,
                 reformersBornHere: [
-                    ...location.birthReformers.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                    ...location.birthReformers.map(reformer => `${API_URL}reformer/${reformer.id}`),
                 ],
                 reformersDiedHere: [
-                    ...location.deathReformers.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                    ...location.deathReformers.map(reformer => `${API_URL}reformer/${reformer.id}`),
                 ],
                 created: location.createdAt.toISOString(),
             }));
@@ -30,8 +31,8 @@ class LocationService {
                 info: {
                     count: total,
                     pages,
-                    next: page < pages ? `http://localhost:3001/api/location?page=${page + 1}` : null,
-                    prev: page > 1 ? `http://localhost:3001/api/location?page=${page - 1}` : null,
+                    next: page < pages ? `${API_URL}location?page=${page + 1}` : null,
+                    prev: page > 1 ? `${API_URL}location?page=${page - 1}` : null,
                 },
                 results,
             };
@@ -73,8 +74,8 @@ class LocationService {
             return data.map(location => ({
                 id: location.id,
                 name: location.name,
-                reformersBornHere: location.birthReformers.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
-                reformersDiedHere: location.deathReformers.map(reformer => `http://localhost:3001/api/reformer/${reformer.id}`),
+                reformersBornHere: location.birthReformers.map(reformer => `${API_URL}reformer/${reformer.id}`),
+                reformersDiedHere: location.deathReformers.map(reformer => `${API_URL}reformer/${reformer.id}`),
                 created: location.createdAt.toISOString(),
             }));
         } catch (error) {
@@ -146,10 +147,10 @@ class LocationService {
                 id: location.id,
                 name: location.name,
                 reformersBornHere: location.birthReformers.map(reformer =>
-                    `http://localhost:3001/api/reformer/${reformer.id}`
+                    `${API_URL}reformer/${reformer.id}`
                 ),
                 reformersDiedHere: location.deathReformers.map(reformer =>
-                    `http://localhost:3001/api/reformer/${reformer.id}`
+                    `${API_URL}reformer/${reformer.id}`
                 ),
                 created: location.createdAt.toISOString(),
             }));

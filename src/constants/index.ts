@@ -13,3 +13,4 @@ export const API_URL = process.env.API_URL;
 export const USER_MDB= process.env.USER_MDB;
 export const PASS_MDB= process.env.PASS_MDB;
 export const SERVER_MDB= process.env.SERVER_MDB;
+export const IMAGE_URL = process.env.IMAGE_URL;
