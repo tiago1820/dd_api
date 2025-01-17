@@ -8,6 +8,7 @@ import logMiddleware from './middlewares/log.middleware';
 import responseLogMiddleware from './middlewares/responseLog.middleware';
 import errorLogMiddleware from './middlewares/errorLog.middleware';
 import anomalyDetectionMiddleware from './middlewares/anomalyDetection.middleware';
+import notFoundMiddleware from './middlewares/notFound.middleware';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/api/reformer', reformersRoutes);
 app.use('/api/location', locationRoutes);
 app.use('/files', express.static('uploads'));
 
+app.use(notFoundMiddleware);
 app.use(errorLogMiddleware);
 
 export default app;
