@@ -66,7 +66,7 @@ class ReformersController {
                 })),
             };
 
-            throw new Error("Simulated server error for testing.");
+            // throw new Error("Simulated server error for testing.");
 
 
             await client.setEx(cacheKey, 60, JSON.stringify(transformedData));
