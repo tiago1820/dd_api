@@ -7,6 +7,7 @@ import locationRoutes from './routes/locations.routes';
 import logMiddleware from './middlewares/log.middleware';
 import responseLogMiddleware from './middlewares/responseLog.middleware';
 import errorLogMiddleware from './middlewares/errorLog.middleware';
+import anomalyDetectionMiddleware from './middlewares/anomalyDetection.middleware';
 
 const app = express();
 
@@ -15,7 +16,8 @@ app.use(morgan('dev'));
 app.use(cors());
 
 app.use(logMiddleware);
-app.use(responseLogMiddleware)
+app.use(responseLogMiddleware);
+app.use(anomalyDetectionMiddleware);
 
 app.use('/api', apiRoutes);
 app.use('/api/reformer', reformersRoutes);
