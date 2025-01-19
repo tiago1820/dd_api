@@ -18,7 +18,7 @@ I am an aspiring backend developer with enthusiasm for designing and building us
 I developed this project to apply my knowledge, gain experience, implement the new technologies I am learning, and because I am studying Reformed theology.
 
 ### Technical stuff?
-Utilizo Node, TypeScript, MySQL, MongoDB y Redis
+I use Node, TypeScript, MySQL, MongoDB and Redis.
 
 ### How can I contribute to the project?
 You can help maintain the project, my next goal is to deploy the project.
