@@ -9,6 +9,7 @@ import responseLogMiddleware from './middlewares/responseLog.middleware';
 import errorLogMiddleware from './middlewares/errorLog.middleware';
 import anomalyDetectionMiddleware from './middlewares/anomalyDetection.middleware';
 import notFoundMiddleware from './middlewares/notFound.middleware';
+import metricsLogMiddleware from './middlewares/metricsLog.middleware';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cors());
 
 app.use(logMiddleware);
 app.use(responseLogMiddleware);
+app.use(metricsLogMiddleware);
 app.use(anomalyDetectionMiddleware);
 
 app.use('/api', apiRoutes);
