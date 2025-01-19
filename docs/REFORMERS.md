@@ -1,0 +1,146 @@
+### Reformer
+
+There is a total of 126 reformers sorted by id.
+
+### Reformer schema
+
+```
+GET http://localhost:3001/api/reformer
+```
+```
+{
+  "info": {
+    "count": 126,
+    "pages": 7,
+    "next": "http://localhost:3001/api/reformer/?page=20",
+    "prev": "http://localhost:3001/api/reformer/?page=18"
+  },
+  "results": [
+    {
+      "id": 2,
+      "name": "JosèBonifacio",
+      "born": "February 13, 1939",
+      "died": "December 14, 2017",
+      "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+      "image": null,
+      "placeOfBirth": null,
+      "placeOfDeath": null,
+      "url": "http://localhost:3001/api/reformer/2",
+      "created": "2025-01-07T01:53:14.218Z",
+    },
+    // ...
+  ]
+}
+```
+
+### Get a single reformer
+
+You can get a single reformer by adding the id as a parameter: /reformer/2
+
+```
+GET http://localhost:3001/api/reformer/2
+```
+```
+{
+  "id": 2,
+  "name": "JosèBonifacio",
+  "born": "February 13, 1939",
+  "died": "December 14, 2017",
+  "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+  "image": null,
+  "placeOfBirth": null,
+  "placeOfDeath": null,
+  "url": "http://localhost:3001/api/reformer/2",
+  "created": "2025-01-07T01:53:14.218Z"
+}
+```
+
+### Get multiple reformers
+
+You can get multiple reformers by adding an array of ids as parameter: /reformer/1,2,3
+
+```
+GET http://localhost:3001/api/reformer/1,83
+```
+```
+[
+  {
+    "id": 2,
+    "name": "JosèBonifacio",
+    "born": "February 13, 1939",
+    "died": "December 14, 2017",
+    "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+    "image": null,
+    "placeOfBirth": null,
+    "placeOfDeath": null,
+    "url": "http://localhost:3001/api/reformer/2",
+    "created": "2025-01-07T01:53:14.218Z"
+  },
+  {
+    "id": 83,
+    "name": "Mario Pedro",
+    "born": "February 13, 1939",
+    "died": "December 14, 2017",
+    "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+    "url": "http://localhost:3001/api/reformer/15",
+    "image": null,
+    "created": "2025-01-07T01:53:14.218Z",
+    "placeOfBirth": {
+      "name": "Governador Valadares, Minas Gerais, Brasil",
+      "url": "http://localhost:3001/api/location/18"
+    },
+    "placeOfDeath": {
+      "name": "Sao Carlos, Sao Paulo, Brasil",
+      "url": "http://localhost:3001/api/location/83"
+    }
+  }
+]
+```
+
+### Filter characters
+
+You can also include filters in the URL by including additional query parameters. To start filtering add a ? followed by the query <query>=<value>. If you want to chain several queries in the same call, use & followed by the query.
+
+For example, if you want to check how many Pedro's born in 1939 exist, just add ?name=John&born=February 13, 1939 to the URL.
+
+Available parameters:
+
+- name: filter by the given name.
+- born: filter by the given birth date.
+- died: filter by the given death date.
+
+```
+GET http://localhost:3001/api/reformer/?name=pedro&born=1939
+```
+```
+[
+  {
+    "id": 15,
+    "name": "Mario Pedro",
+    "born": "February 13, 1939",
+    "died": "December 14, 2017",
+    "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+    "createdAt": "2025-01-07T01:53:14.218Z",
+    "birthPlace": {
+      "id": 18,
+	"name": "Governador Valadares, Minas Gerais, Brasil"
+    },
+    "deathPlace": {
+      "id": 3,
+      "name": "Sao Carlos, Sao Paulo, Brasil"
+    },
+    "image": null
+  },
+  {
+    "id": 16,
+    "name": "Pedro da Silva",
+    "born": "February 13, 1939",
+    "died": "December 14, 2017",
+    "contribution": "Founder of Ligonier Ministries; educator and author who popularized Reformed Presbyterian theology through books and teachings.",
+    "createdAt": "2025-01-07T01:53:14.218Z",
+    "birthPlace": null,
+    "deathPlace": null,
+    "image": null
+  }
+]
+```
