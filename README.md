@@ -9,7 +9,7 @@
 ### About
 The Reformers API is a REST API dedicated to the main theologians and pastors of the Protestant Reformation. You will have access to hundreds of reformers, images, and locations. The Reformers API is rich with historical and biographical information about each reformer.
 
-[Check out the documentation to get started](/docs/INTRO.md)
+[Check out the documentation to get started](/docs/00.INTRO.md)
 
 ### Who are you?
 I am an aspiring backend developer with enthusiasm for designing and building useful and interesting things.
@@ -31,4 +31,3 @@ This API is open source and uses an MIT license.
 ### Connect with me:
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tiago1820/)
-
